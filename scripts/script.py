@@ -5,28 +5,55 @@ import random
 
 def get_prompt():
     print("Waiting for response from server...")
-    response = requests.get("https://imdb-api.com/en/API/IMDbList/k_ix66kf8r/ls052535080")
+
+    """
+    response = requests.get("https://imdb-api.com/en/API/IMDbList/k_ix66kf8r/ls507259888")
     #1001 movies - ls052535080
     #Monster movies - ls507259888
     print("Response got!")
+    print(response)
+
+    if response.ok:
+        print("200!")
+
+    json = response.json()
+    print("-Json got-")
+    print(json)
+
+    return random.choice(json["items"])["title"]
+    """
+    response = requests.get("https://pokeapi.co/api/v2/pokemon")
+    print("Response got!")
+    #print(response)
+
+    if not response.ok:
+        return ""
 
     json = response.json()
     #print("-Json got-")
+    #print(json)
 
-    return random.choice(json["items"])["title"]
+    poke_num = random.randint(1,151)
 
-    #random_title = random.choice(json["items"])["title"]
-    #random_title = "The Beast from 20,000 Fathoms"
-    #print("-Random title got-")
+    #print("https://pokeapi.co/api/v2/pokemon/{}".format(poke_num))
+    print("Waiting for response from server...")
+    response = requests.get("https://pokeapi.co/api/v2/pokemon/{}".format(poke_num))
+    print("Response got!")
+    print(response)
 
-    #print(response)
-    #print("###########LIST###########")
-    #print(json["items"])
-    #print("###########RANDOM###########")
-    #print(random_title)
+    if not response.ok:
+        return ""
+
+    json = response.json()
+    #print("-Json got-")
+    #print(json)
+    return json["forms"][0]["name"].capitalize()
 
 def play_hangman():
     prompt_title = get_prompt()
+    if not prompt_title:
+        print("Error connecting to API server!")
+        return
     corr_letters = []
     wron_letters = []
     lives = 6
