@@ -39,7 +39,7 @@ def get_prompt():
     print("Waiting for response from server...")
     response = requests.get("https://pokeapi.co/api/v2/pokemon/{}".format(poke_num))
     print("Response got!")
-    print(response)
+    #print(response)
 
     if not response.ok:
         return ""
