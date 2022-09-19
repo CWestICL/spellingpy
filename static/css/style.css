@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(255, 255, 255);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+}
+.char-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    background-color: rgb(146, 87, 202);
+    padding: 10px;
+}
+.char {
+    aspect-ratio: 1 / 1;
+    max-width: 120px;
+    margin: 10px;
+    background-color: rgb(183, 152, 212);
+    display: grid;
+    place-items: center;
+    font-size: 2em;
+}

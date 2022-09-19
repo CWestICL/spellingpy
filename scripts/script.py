@@ -6,21 +6,23 @@ import random
 def get_prompt():
     print("Waiting for response from server...")
 
-    """
+    #"""
     response = requests.get("https://imdb-api.com/en/API/IMDbList/k_ix66kf8r/ls507259888")
     #1001 movies - ls052535080
     #Monster movies - ls507259888
-    print("Response got!")
-    print(response)
+    #print("Response got!")
+    #print(response)
 
     if response.ok:
         print("200!")
 
     json = response.json()
-    print("-Json got-")
-    print(json)
+    #print("-Json got-")
+    #print(json)
 
     return random.choice(json["items"])["title"]
+    #"""
+
     """
     response = requests.get("https://pokeapi.co/api/v2/pokemon")
     print("Response got!")
@@ -48,6 +50,7 @@ def get_prompt():
     #print("-Json got-")
     #print(json)
     return json["forms"][0]["name"].capitalize()
+    """
 
 def play_hangman():
     prompt_title = get_prompt()
