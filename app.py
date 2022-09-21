@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import random
@@ -90,7 +90,7 @@ class Score(db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect("/daily")
 
 @app.route("/daily")
 def daily():

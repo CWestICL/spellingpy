@@ -99,15 +99,22 @@
 </head>
 <body>
     <div class="content" id="content">
-        <h1>Daily Challenge</h1>
+        <h1>SpellingPy</h1>
+        <h2>Daily Challenge</h2>
         <div class="word-space noselect" id="word-space"></div>
-        <div class="char-grid" id="char-grid"></div>
-        <div class="game-btn noselect" onclick="refresh()">Refresh</div>
-        <div class="name-input">
-            <label for="name-text">Name: </label>
-            <input id="name-text" name="name-text" type="text" maxlength="20">
+        <div class="grid-container">
+            <div class="char-grid" id="char-grid"></div>
         </div>
-        <div class="game-btn noselect" onclick="submit()">Submit</div>
+        <div class="btn-container">
+            <div class="reset-btn noselect" onclick="refresh()">Reset</div>
+            <div class="submit-container">
+                <div class="name-input">
+                    <label for="name-text">Name: </label>
+                    <input id="name-text" name="name-text" type="text" maxlength="20">
+                </div>
+                <div class="submit-btn noselect" onclick="submit()">Submit</div>
+            </div>
+        </div>
     </div>
     <form action="/board" method="POST" id="board-form" class="hidden">
         <input type="text" id="form-word" name="word">

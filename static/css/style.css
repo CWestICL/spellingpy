@@ -1,29 +1,49 @@
 body {
-    background-color: rgb(255, 255, 255);
+    background-color: #293132;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    color: white;
+}
+h1 {
+    margin: 5px auto;
+    font-size: 3em;
+}
+h2 {
+    margin: 5px auto 10px auto;
 }
 .content {
     display: flex;
     flex-direction: column;
 }
+.grid-container {
+    background-color: #547AA5;
+}
 .char-grid {
     display: grid;
     grid-template-columns: auto auto auto auto;
-    background-color: rgb(146, 87, 202);
     padding: 10px;
+    aspect-ratio: 1 / 1;
+    max-height: 550px;
+    margin: 0 auto;
 }
 .char {
     aspect-ratio: 1 / 1;
     max-width: 120px;
+    min-width: 30px;
     margin: 10px;
-    background-color: rgb(183, 152, 212);
+    background-color: #A6E9E9;
+    color: black;
     display: grid;
     place-items: center;
     font-size: 2em;
+    border-radius: 8px;
+}
+.char:hover {
+    background-color: #7cc0c0;
 }
 
 .char.selected {
-    background-color: rgb(83, 45, 118);
+    background-color: #306a6a;
 }
 
 .word-space {
@@ -32,15 +52,51 @@ body {
     min-height: 100px;
     display: grid;
     place-items: center;
-    font-size: 2em;
+    font-size: 2.4em;
 }
 
-.game-btn {
+.reset-btn {
     padding: 30px;
-    margin: 10px auto;
-    background-color: rgb(183, 152, 212);
-    width: 200px;
+    background-color: #A6E9E9;
+    color: black;
+    margin: 5px;
+    flex: 1 1 150px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.reset-btn:hover {
+    background-color: #7cc0c0;
+}
+
+.submit-btn {
+    padding: 30px;
+    background-color: #A6E9E9;
+    color: black;
     text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 8px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.submit-btn:hover {
+    background-color: #7cc0c0;
+}
+
+.btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.submit-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    margin: 5px;
+    flex: 1 1 150px;
 }
 
 .name-input {
@@ -48,6 +104,7 @@ body {
 }
 
 .red {
+    box-sizing: border-box;
     border: solid red;
 }
 
@@ -62,13 +119,14 @@ body {
 .score-column {
     padding: 10px;
     margin: 5px;
-    background-color: rgb(183, 152, 212);
+    background-color: #A6E9E9;
+    color: black;
     text-align: center;
 }
 
 .header {
     color: white;
-    background-color: rgb(83, 45, 118);
+    background-color: #547AA5;
     font-weight: bold;
 } 
 
