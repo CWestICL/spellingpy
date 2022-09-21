@@ -21,3 +21,78 @@ body {
     place-items: center;
     font-size: 2em;
 }
+
+.char.selected {
+    background-color: rgb(83, 45, 118);
+}
+
+.word-space {
+    background-color: black;
+    color: white;
+    min-height: 100px;
+    display: grid;
+    place-items: center;
+    font-size: 2em;
+}
+
+.game-btn {
+    padding: 30px;
+    margin: 10px auto;
+    background-color: rgb(183, 152, 212);
+    width: 200px;
+    text-align: center;
+}
+
+.name-input {
+    margin: 10px auto;
+}
+
+.red {
+    border: solid red;
+}
+
+.score-board {
+    margin: 10px auto;
+}
+
+.score-row {
+    display: flex;
+}
+
+.score-column {
+    padding: 10px;
+    margin: 5px;
+    background-color: rgb(183, 152, 212);
+    text-align: center;
+}
+
+.header {
+    color: white;
+    background-color: rgb(83, 45, 118);
+    font-weight: bold;
+} 
+
+.score-name {
+    width: 150px;
+}
+
+.score-score {
+    width: 50px;
+}
+
+.score-word {
+    width: 150px;
+}
+
+.hidden {
+    display: none;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

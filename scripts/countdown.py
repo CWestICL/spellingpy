@@ -1,8 +1,8 @@
 import requests
 import random
 
-vowels = "aeiou"
-consonants = "bcdfghjklmnpqrstvwxyz"
+vowels = "aaeeeiioou"
+consonants = "bbccddddffggghhjkllllmmnnnnnppqrrrrrrssssttttttvvwwxyyz"
 
 def get_char(category):
     return random.choice(category)
@@ -21,7 +21,7 @@ def get_letters():
         letters += char
     shuffled = ''.join(random.sample(letters,len(letters)))
     #print(letters)
-    #print(shuffled)
+    print(shuffled)
     return shuffled
 
 def print_grid(letters):

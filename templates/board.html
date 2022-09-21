@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>SpellingPy</title>
+    <script>
+        async function populate() {
+            const response = await fetch("http://127.0.0.1:5000/score");
+            const body = await response.json();
+            console.log(response.status);
+            console.log(body);
+            console.log(typeof body);
+            //data = JSON.parse("body");
+            //console.log(data);
+            const leaderboard = eval("(" + body + ")").reverse();
+            console.log(leaderboard);
+            scoreBoard.innerHTML += `
+                <div class="score-row">
+                    <div class="score-name score-column header">Name</div>
+                    <div class="score-score score-column header">Score</div>
+                    <div class="score-word score-column header">Answer</div>
+                </div>
+            `;
+            for (let score of leaderboard) {
+                scoreBoard.innerHTML += `
+                    <div class="score-row">
+                        <div class="score-name score-column">${score.name}</div>
+                        <div class="score-score score-column">${score.score}</div>
+                        <div class="score-word score-column">${score.word}</div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="content">
+        <h1>Leaderboard</h1>
+        <div class="word-space noselect" id="word-space">{{ message }}</div>
+        <div class="score-board" id="score-board"></div>
+        <div class="game-btn noselect" onclick="">Refresh</div>
+        <div class="game-btn noselect" onclick="">Submit</div>
+    </div>
+    <script>
+        const scoreBoard = document.getElementById("score-board");
+        const wordSpace = document.getElementById("word-space");
+        populate();
+    </script>
+</body>
+</html>

@@ -6,15 +6,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>SpellingPy</title>
+    <script>
+        const vowels = "aaeeeiioou";
+        const consonants = "bbccddddffggghhjkllllmmnnnnnppqrrrrrrssssttttttvvwwxyyz";
+
+        let answer = "";
+
+        function getChar(category) {
+            return category[Math.floor(Math.random() * category.length)];
+        }
+
+        function getLetters() {
+            let letters = "";
+            for (i=0;i<5;i++) {
+                let char = getChar(vowels);
+                letters += char;
+            }
+            for (i=0;i<6;i++) {
+                let char = getChar(consonants);
+                letters += char;
+            }
+            for (i=0;i<5;i++) {
+                let category = (Math.random() > 0.5 ? vowels : consonants);
+                let char = getChar(category);
+                letters += char;
+            }
+            let shuffled = letters.split('').sort(function(){return 0.5-Math.random()}).join('');
+            console.log(shuffled,shuffled.length);
+            return shuffled.toUpperCase();
+        }
+
+        const gameLetters = getLetters();
+
+        function populate() {
+            for (i=0;i<gameLetters.length;i++) {
+                charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`
+            }
+        }
+
+        function clickChar(id) {
+            const charButton = document.getElementById("char-" + id);
+            if (!charButton.classList.contains("selected")) {
+                charButton.classList.add("selected");
+                answer += charButton.innerText;
+                renderAnswer();
+            }
+        }
+
+        function renderAnswer() {
+            wordSpace.innerText = answer;
+        }
+
+        function refresh() {
+            answer = "";
+            const chars = document.getElementsByClassName("char");
+            for (let char of chars) {
+                char.classList.remove("selected");
+            }
+            renderAnswer();
+        }
+    </script>
 </head>
 <body>
     <div class="content">
         <h1>Free Play</h1>
-        <div class="char-grid">
-            {% for char in letters %}
-            <div class="char">{{char}}</div>
-            {% endfor %}
-        </div>
+        <div class="word-space noselect" id="word-space"></div>
+        <div class="char-grid" id="char-grid"></div>
+        <div class="game-btn noselect" onclick="refresh()">Refresh</div>
+        <div class="game-btn noselect" onclick="submit()">Submit</div>
     </div>
+    <script>
+        const charGrid = document.getElementById("char-grid");
+        const wordSpace = document.getElementById("word-space");
+        populate();
+    </script>
 </body>
 </html>

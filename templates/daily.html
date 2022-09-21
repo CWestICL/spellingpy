@@ -5,11 +5,123 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>SpellingPy</title>
+    <title>SpellingPy - Daily Challenge</title>
+    <script>
+        let answer = "";
+        let challengeNum;
+
+        async function populate() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const body = await response.json();
+                console.log(response.status);
+                console.log(body);
+                if (response.json !== 200) {
+                    const gameLetters = body.challenge.toUpperCase();
+                    challengeNum = body.number
+
+                    for (i=0;i<gameLetters.length;i++) {
+                        charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`
+                    }
+                }
+                else {
+                    alert("Couldn't connect to server. Try again later.")
+                }
+            }
+            catch(err) {
+                alert("Couldn't connect to server. Try again later.")
+            }
+        }
+
+        function clickChar(id) {
+            const charButton = document.getElementById("char-" + id);
+            if (!charButton.classList.contains("selected")) {
+                charButton.classList.add("selected");
+                answer += charButton.innerText;
+                renderAnswer();
+            }
+        }
+
+        function renderAnswer() {
+            wordSpace.innerText = answer;
+        }
+
+        function refresh() {
+            answer = "";
+            const chars = document.getElementsByClassName("char");
+            for (let char of chars) {
+                char.classList.remove("selected");
+            }
+            renderAnswer();
+        }
+
+        async function submit() {
+            if (!nameInput.value) {
+                nameInput.classList.add("red");
+            }
+            else if (answer) {
+                content.innerHTML = `<h2>Submitting...</h2>`;
+                let reqOptions = {
+                    method: "POST",
+                    headers: {
+                    "Content-Type": 'application/json'
+                    },
+                    body : JSON.stringify({
+                        name: nameInput.value,
+                        word: answer,
+                        challenge: challengeNum
+                    })
+                };
+                console.log(reqOptions);
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/score",reqOptions);
+                    const body = await response.json();
+                    console.log(response.status);
+                    console.log(body);
+                    if (response.status !== 200) {
+                        content.innerHTML = `<h2>${body.message}</h2><h2>Try again later</h2>`;
+                    }
+                    else {
+                        formWord.value = body.word;
+                        formScore.value = body.score;
+                        boardForm.submit();
+
+                    }
+                }
+                catch (err) {
+                    console.log("Error connecting to game server!");
+                    console.log(err);
+                    alert("Error connecting to game server!");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
-    <div class="content">
+    <div class="content" id="content">
         <h1>Daily Challenge</h1>
+        <div class="word-space noselect" id="word-space"></div>
+        <div class="char-grid" id="char-grid"></div>
+        <div class="game-btn noselect" onclick="refresh()">Refresh</div>
+        <div class="name-input">
+            <label for="name-text">Name: </label>
+            <input id="name-text" name="name-text" type="text" maxlength="20">
+        </div>
+        <div class="game-btn noselect" onclick="submit()">Submit</div>
     </div>
+    <form action="/board" method="POST" id="board-form" class="hidden">
+        <input type="text" id="form-word" name="word">
+        <input type="text" id="form-score" name="score">
+    </form>
+    <script>
+        const content = document.getElementById("content");
+        const charGrid = document.getElementById("char-grid");
+        const wordSpace = document.getElementById("word-space");
+        const nameInput = document.getElementById("name-text");
+        const boardForm = document.getElementById("board-form");
+        const formWord = document.getElementById("form-word");
+        const formScore = document.getElementById("form-score");
+        populate();
+    </script>
 </body>
 </html>

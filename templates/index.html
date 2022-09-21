@@ -10,8 +10,10 @@
 <body>
     <div class="content">
         <h1>SpellingPy</h1>
-        <button action="/daily">Daily Challenge</button>
-        <button action="/free">Free Play</button>
+        <div class="game-btn noselect" onclick="window.location.href = '{{ url_for('daily') }}'">Daily Challenge</div>
+        <!--
+        <div class="game-btn noselect" onclick="window.location.href = '{{ url_for('free') }}'">Free Play</div>
+        //-->
     </div>
 </body>
 </html>
