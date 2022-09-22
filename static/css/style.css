@@ -87,6 +87,19 @@ h2 {
     background-color: #42b0b0;
 }
 
+.submit-btn.free {
+    padding: 30px;
+    background-color: #51cfcf;
+    color: black;
+    margin: 5px;
+    flex: 1 1 150px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
 .btn-container {
     display: flex;
     flex-wrap: wrap;

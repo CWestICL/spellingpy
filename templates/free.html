@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>SpellingPy</title>
+    <title>SpellingPy - Free Play</title>
     <script>
         const vowels = "aaeeeiioou";
         const consonants = "bbccddddffggghhjkllllmmnnnnnppqrrrrrrssssttttttvvwwxyyz";
@@ -65,15 +65,57 @@
             }
             renderAnswer();
         }
+
+        async function submit() {
+            if (answer) {
+                let reqOptions = {
+                    method: "POST",
+                    headers: {
+                    "Content-Type": 'application/json'
+                    },
+                    body : JSON.stringify({
+                        word: answer
+                    })
+                };
+                console.log(reqOptions);
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/score/check",reqOptions);
+                    const body = await response.json();
+                    console.log(response.status);
+                    console.log(body);
+                    if (body.score > 0) {
+                        alert("You score " + body.score + " for the word " + body.word);
+                    }
+                    else {
+                        alert("Sorry, but the word " + body.word + " is not in the Oxford Dictionary");
+
+                    }
+                }
+                catch (err) {
+                    console.log("Error connecting to game server!");
+                    console.log(err);
+                    alert("Error connecting to game server!");
+                }
+            }
+            refresh();
+        }
     </script>
 </head>
 <body>
-    <div class="content">
-        <h1>Free Play</h1>
+    <div class="content" id="content">
+        <h1>SpellingPy</h1>
+        <h2>Free Play</h2>
         <div class="word-space noselect" id="word-space"></div>
-        <div class="char-grid" id="char-grid"></div>
-        <div class="game-btn noselect" onclick="refresh()">Refresh</div>
-        <div class="game-btn noselect" onclick="submit()">Submit</div>
+        <div class="grid-container">
+            <div class="char-grid" id="char-grid"></div>
+        </div>
+        <div class="btn-container">
+            <div class="reset-btn noselect free" onclick="refresh()">Reset</div>
+            <div class="submit-btn noselect free" onclick="submit()">Submit</div>
+        </div>
+    </div>
+    <div class="board-link-space">
+        <a class="board-link" href="/daily">Daily Challenge</a>
     </div>
     <script>
         const charGrid = document.getElementById("char-grid");
