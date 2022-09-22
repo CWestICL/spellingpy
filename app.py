@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import requests
 import aiohttp
@@ -142,23 +142,106 @@ def json():
         res = make_response(jsonify(str(scores)), 200)
         return res
 
-@app.route("/board", methods=["POST"])
-def board():
-    print("#######################################")
-    print(request.form)
-    answer = request.form["word"]
-    score = request.form["score"]
-    if int(score) > 0:
-        message = "You scored " + score + " with the word " + answer + "!"
+@app.route("/score/<int:id>", methods=["GET","PUT","DELETE"])
+def delete(id):
+    if request.method == "DELETE":
+        score_delete = Score.query.get_or_404(id)
+        print("Deleting score with ID: " + str(id))
+        try:
+            db.session.delete(score_delete)
+            db.session.commit()
+            response = {
+                "message": "Score ID: " + str(id) + " has been deleted"
+            }
+            res = make_response(jsonify(response), 200)
+            return res
+        except:
+            response = {
+                "message": "There was an error deleting score"
+            }
+            res = make_response(jsonify(response), 400)
+            return res
+    elif request.method == "PUT":
+        score_update = Score.query.get_or_404(id)
+        print("Updating score with ID: " + str(id))
+        print(score_update)
+        if request.is_json:
+            req = request.get_json()
+            print(type(req))
+            print(req)
+            try:
+                if "name" in req:
+                    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    print(score_update.name)
+                    print(req["name"])
+                    score_update.name = req["name"]
+                    print(score_update.name)
+
+                if "score" in req:
+                    score_update.score = req["score"]
+
+                if "word" in req:
+                    score_update.word = req["word"]
+
+                if "challenge" in req:
+                    score_update.challenge = req["challenge"]
+                
+                print(score_update)
+                db.session.commit()
+                response = {
+                    "message": "Score ID: " + str(id) + " has been updated"
+                }
+                res = make_response(jsonify(response), 200)
+                return res
+            except Exception as e:
+                print("#################")
+                print(e)
+                print("#################")
+                response = {
+                    "message": "There was an error updating score"
+                }
+                res = make_response(jsonify(response), 400)
+                return res
+        else:
+            response = {
+                "message": "JSON not received"
+            }
+            res = make_response(jsonify(response), 400)
+            return res
     else:
-        message = "Sorry, " + answer + " wasn't in the Oxford Dictionary. You scored 0."
-    return render_template("board.html", message=message)
+        scores = Score.query.order_by(Score.score).filter(Score.challenge == (id)).all()
+        print(scores)
+        print(type(scores))
+        res = make_response(jsonify(str(scores)), 200)
+        return res
+
+@app.route("/board", methods=["GET","POST"])
+def board():
+    if request.method == "POST":
+        answer = request.form["word"]
+        score = request.form["score"]
+        if int(score) > 0:
+            message = "You scored " + score + " with the word " + answer + "!"
+        else:
+            message = "Sorry, " + answer + " wasn't in the Oxford Dictionary. You scored 0."
+        return render_template("daily-board.html", message=message)
+    else:
+        return render_template("board.html")
 
 @app.route("/challenge")
 def challenge():
     response = {
         "challenge": today_challenge,
         "number": challenge_day + 1
+    }
+    res = make_response(jsonify(response), 200)
+    return res
+
+@app.route("/challenge/<int:id>")
+def challenge_id(id):
+    response = {
+        "challenge": challenges[id - 1],
+        "date": (start_date + timedelta(days=id - 1)).strftime("%Y/%m/%d")
     }
     res = make_response(jsonify(response), 200)
     return res

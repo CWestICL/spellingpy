@@ -5,42 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>SpellingPy - Leaderboards</title>
+    <title>SpellingPy - Daily Leaderboard</title>
     <script>
         async function populate() {
-            let challNum;
             try {
-                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const response = await fetch("http://127.0.0.1:5000/score");
                 const body = await response.json();
-                console.log(response.status);
-                console.log(body);
-                challNum = body.number;
-                for (i=0;i<challNum;i++) {
-                    btnSpace.innerHTML += `<div id="challbtn-${i + 1}" class="board-btn" onclick="getBoard(${i + 1})">${i + 1}</div>`;
-                }
-            }
-            catch(err) {
-                alert("Couldn't connect to server. Try again later.");
-            }
-        }
-
-        async function getBoard(id) {
-            const btns = document.getElementsByClassName("board-btn");
-            for (let btn of btns) {
-                btn.classList.remove("selected");
-            }
-            const challBtn = document.getElementById("challbtn-" + id);
-            challBtn.classList.add("selected");
-            try {
-                let response = await fetch(`http://127.0.0.1:5000/challenge/${id}`);
-                let body = await response.json();
-                console.log(response.status);
-                console.log(body);
-
-                wordSpace.innerText = `Challenge #${id} - ${body.date}\n${body.challenge.toUpperCase()}`;
-
-                response = await fetch(`http://127.0.0.1:5000/score/${id}`);
-                body = await response.json();
                 console.log(response.status);
                 console.log(body);
                 console.log(typeof body);
@@ -48,7 +18,7 @@
                 //console.log(data);
                 const leaderboard = eval("(" + body + ")").reverse();
                 console.log(leaderboard);
-                scoreBoard.innerHTML = `
+                scoreBoard.innerHTML += `
                     <div class="score-row">
                         <div class="score-name score-column header">Name</div>
                         <div class="score-score score-column header">Score</div>
@@ -74,15 +44,16 @@
 <body>
     <div class="content">
         <h1>SpellingPy</h1>
-        <h2>Leaderboards</h2>
-        <div class="btn-space" id="btn-space"></div>
-        <div class="word-space" id="word-space"></div>
+        <h2>Leaderboard</h2>
+        <div class="word-space noselect" id="word-space">{{ message }}</div>
         <div class="score-board" id="score-board"></div>
+        <div class="board-link-space">
+            <a class="board-link" href="/board">Leaderboards</a>
+        </div>
     </div>
     <script>
         const scoreBoard = document.getElementById("score-board");
         const wordSpace = document.getElementById("word-space");
-        const btnSpace = document.getElementById("btn-space");
         populate();
     </script>
 </body>

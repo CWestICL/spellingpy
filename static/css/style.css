@@ -53,6 +53,7 @@ h2 {
     display: grid;
     place-items: center;
     font-size: 2.4em;
+    text-align: center;
 }
 
 .reset-btn {
@@ -73,7 +74,7 @@ h2 {
 
 .submit-btn {
     padding: 30px;
-    background-color: #A6E9E9;
+    background-color: #51cfcf;
     color: black;
     text-align: center;
     width: 80%;
@@ -83,7 +84,7 @@ h2 {
     font-weight: bold;
 }
 .submit-btn:hover {
-    background-color: #7cc0c0;
+    background-color: #42b0b0;
 }
 
 .btn-container {
@@ -140,6 +141,49 @@ h2 {
 
 .score-word {
     width: 150px;
+}
+
+.btn-space {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.board-btn {
+    aspect-ratio: 1 / 1;
+    width: 50px;
+    margin: 10px;
+    background-color: #A6E9E9;
+    color: black;
+    display: grid;
+    place-items: center;
+    font-size: 2em;
+    border-radius: 8px;
+}
+
+.board-btn:hover {
+    background-color: #7cc0c0;
+}
+
+.board-btn.selected {
+    background-color: #306a6a;
+}
+
+.board-link-space {
+    padding: 20px 10px;
+}
+
+.board-link {
+    font-size: 2em;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.board-link:hover {
+    font-size: 2em;
+    font-weight: bold;
+    text-decoration: none;
+    color: #A6E9E9;
 }
 
 .hidden {

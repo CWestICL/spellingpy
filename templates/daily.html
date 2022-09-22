@@ -25,11 +25,11 @@
                     }
                 }
                 else {
-                    alert("Couldn't connect to server. Try again later.")
+                    alert("Couldn't connect to server. Try again later.");
                 }
             }
             catch(err) {
-                alert("Couldn't connect to server. Try again later.")
+                alert("Couldn't connect to server. Try again later.");
             }
         }
 
@@ -115,6 +115,9 @@
                 <div class="submit-btn noselect" onclick="submit()">Submit</div>
             </div>
         </div>
+    </div>
+    <div class="board-link-space">
+        <a class="board-link" href="/board">Leaderboards</a>
     </div>
     <form action="/board" method="POST" id="board-form" class="hidden">
         <input type="text" id="form-word" name="word">
