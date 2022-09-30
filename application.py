@@ -22,7 +22,7 @@ for idx, chall in enumerate(challenges):
 print("#######################")
 
 
-start_date = datetime(2022, 9, 21).date()
+start_date = datetime(2022, 9, 19).date()
 today_date = datetime.utcnow().date()
 challenge_day = (today_date - start_date).days
 today_challenge = challenges[challenge_day]

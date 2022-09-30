@@ -18,10 +18,12 @@
                 console.log(body);
                 if (response.json !== 200) {
                     const gameLetters = body.challenge.toUpperCase();
-                    challengeNum = body.number
-
                     for (i=0;i<gameLetters.length;i++) {
                         charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`
+                    }
+                    if (localStorage.getItem("data")) {
+                        const data = JSON.parse(localStorage.getItem("data"));
+                        nameInput.value = data.name;
                     }
                 }
                 else {
@@ -82,6 +84,14 @@
                         content.innerHTML = `<h2>${body.message}</h2><h2>Try again later</h2>`;
                     }
                     else {
+                        const data = {
+                            name: nameInput.value,
+                            challenge: challengeNum,
+                            word: body.word,
+                            score: body.score
+                        };
+                        localStorage.setItem("data", JSON.stringify(data));
+
                         formWord.value = body.word;
                         formScore.value = body.score;
                         boardForm.submit();
@@ -95,12 +105,53 @@
                 }
             }
         }
+
+        async function checkData() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const body = await response.json();
+                console.log(response.status);
+                console.log(body);
+                if (response.json !== 200) {
+                    challengeNum = body.number;
+                    if (localStorage.getItem("data")) {
+                        console.log("Data found");
+                        console.log(JSON.parse(localStorage.getItem("data")));
+                        const data = JSON.parse(localStorage.getItem("data"));
+                        console.log(data.challenge);
+                        console.log(challengeNum);
+                        if (data.challenge === challengeNum) {
+                            console.log("Challenge done");
+                            formWord.value = data.word;
+                            formScore.value = data.score;
+                            boardForm.submit();
+                        }
+                    }
+                    else {
+                        console.log("Data not found");
+                    }
+                }
+                else {
+                    alert("Couldn't connect to server. Try again later.");
+                }
+            }
+            catch(err) {
+                alert("Couldn't connect to server. Try again later.");
+            }
+        }
     </script>
 </head>
 <body>
     <div class="content" id="content">
         <h1>SpellingPy</h1>
         <h2>Daily Challenge</h2>
+        <header>
+            <a class="board-link" href="/board">Leaderboards</a>
+            <!--
+            <br>
+            <a class="board-link" href="/free">Free Play</a>
+            -->
+        </header>
         <div class="word-space noselect" id="word-space"></div>
         <div class="grid-container">
             <div class="char-grid" id="char-grid"></div>
@@ -109,17 +160,12 @@
             <div class="reset-btn noselect" onclick="refresh()">Reset</div>
             <div class="submit-container">
                 <div class="name-input">
-                    <label for="name-text">Name: </label>
+                    <label class="name-label" for="name-text">Name: </label>
                     <input id="name-text" name="name-text" type="text" maxlength="20">
                 </div>
                 <div class="submit-btn noselect" onclick="submit()">Submit</div>
             </div>
         </div>
-    </div>
-    <div class="board-link-space">
-        <a class="board-link" href="/board">Leaderboards</a>
-        <br>
-        <a class="board-link" href="/free">Free Play</a>
     </div>
     <form action="/board" method="POST" id="board-form" class="hidden">
         <input type="text" id="form-word" name="word">
@@ -133,6 +179,8 @@
         const boardForm = document.getElementById("board-form");
         const formWord = document.getElementById("form-word");
         const formScore = document.getElementById("form-score");
+        //console.log(JSON.parse(localStorage.getItem("data")));
+        checkData();
         populate();
     </script>
 </body>

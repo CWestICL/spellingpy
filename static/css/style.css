@@ -6,10 +6,14 @@ body {
 }
 h1 {
     margin: 5px auto;
-    font-size: 3em;
+    font-size: 2.6em;
 }
 h2 {
     margin: 5px auto 10px auto;
+}
+header {
+    display: flex;
+    padding: 10px 10px;
 }
 .content {
     display: flex;
@@ -23,12 +27,12 @@ h2 {
     grid-template-columns: auto auto auto auto;
     padding: 10px;
     aspect-ratio: 1 / 1;
-    max-height: 550px;
+    max-height: 480px;
     margin: 0 auto;
 }
 .char {
     aspect-ratio: 1 / 1;
-    max-width: 120px;
+    max-width: 100px;
     min-width: 30px;
     margin: 10px;
     background-color: #A6E9E9;
@@ -181,22 +185,27 @@ h2 {
     background-color: #306a6a;
 }
 
-.board-link-space {
-    padding: 20px 10px;
-}
-
 .board-link {
-    font-size: 2em;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-}
-
-.board-link:hover {
-    font-size: 2em;
+    font-size: 1.4em;
     font-weight: bold;
     text-decoration: none;
     color: #A6E9E9;
+    margin: 0 20px;
+}
+
+.board-link:hover {
+    color: #7cc0c0;
+}
+
+#name-text {
+    height: 1.4em;
+    width: 8em;
+    font-size: 1.5em;
+}
+
+.name-label {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .hidden {

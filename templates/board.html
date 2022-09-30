@@ -15,8 +15,8 @@
                 console.log(response.status);
                 console.log(body);
                 challNum = body.number;
-                for (i=0;i<challNum;i++) {
-                    btnSpace.innerHTML += `<div id="challbtn-${i + 1}" class="board-btn" onclick="getBoard(${i + 1})">${i + 1}</div>`;
+                for (i=0;i<challNum - 1;i++) {
+                    btnSpace.innerHTML += `<div id="challbtn-${i + 1}" class="board-btn noselect" onclick="getBoard(${i + 1})">${i + 1}</div>`;
                 }
             }
             catch(err) {
@@ -75,14 +75,16 @@
     <div class="content">
         <h1>SpellingPy</h1>
         <h2>Leaderboards</h2>
-        <div class="btn-space" id="btn-space"></div>
-        <div class="word-space" id="word-space"></div>
-        <div class="score-board" id="score-board"></div>
-        <div class="board-link-space">
+        <header>
             <a class="board-link" href="/daily">Daily Challenge</a>
+            <!--
             <br>
             <a class="board-link" href="/free">Free Play</a>
-        </div>
+            -->
+        </header>
+        <div class="btn-space" id="btn-space"></div>
+        <div class="word-space" id="word-space">🢁 Select challenge 🢁</div>
+        <div class="score-board" id="score-board"></div>
     </div>
     <script>
         const scoreBoard = document.getElementById("score-board");
