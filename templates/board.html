@@ -10,7 +10,7 @@
         async function populate() {
             let challNum;
             try {
-                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
                 const body = await response.json();
                 console.log(response.status);
                 console.log(body);
@@ -32,14 +32,14 @@
             const challBtn = document.getElementById("challbtn-" + id);
             challBtn.classList.add("selected");
             try {
-                let response = await fetch(`http://127.0.0.1:5000/challenge/${id}`);
+                let response = await fetch(`http://cwesticl.pythonanywhere.com/challenge/${id}`);
                 let body = await response.json();
                 console.log(response.status);
                 console.log(body);
 
                 wordSpace.innerText = `Challenge #${id} - ${body.date}\n${body.challenge.toUpperCase()}`;
 
-                response = await fetch(`http://127.0.0.1:5000/score/${id}`);
+                response = await fetch(`http://cwesticl.pythonanywhere.com/score/${id}`);
                 body = await response.json();
                 console.log(response.status);
                 console.log(body);

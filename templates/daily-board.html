@@ -9,7 +9,7 @@
     <script>
         async function populate() {
             try {
-                const response = await fetch("http://127.0.0.1:5000/score");
+                const response = await fetch("http://cwesticl.pythonanywhere.com/score");
                 const body = await response.json();
                 console.log(response.status);
                 console.log(body);

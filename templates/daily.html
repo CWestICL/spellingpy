@@ -12,7 +12,7 @@
 
         async function populate() {
             try {
-                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
                 const body = await response.json();
                 console.log(response.status);
                 console.log(body);
@@ -76,7 +76,7 @@
                 };
                 console.log(reqOptions);
                 try {
-                    const response = await fetch("http://127.0.0.1:5000/score",reqOptions);
+                    const response = await fetch("http://cwesticl.pythonanywhere.com/score",reqOptions);
                     const body = await response.json();
                     console.log(response.status);
                     console.log(body);
@@ -108,7 +108,7 @@
 
         async function checkData() {
             try {
-                const response = await fetch("http://127.0.0.1:5000/challenge");
+                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
                 const body = await response.json();
                 console.log(response.status);
                 console.log(body);
