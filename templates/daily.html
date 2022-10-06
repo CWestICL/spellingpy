@@ -7,15 +7,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>SpellingPy - Daily Challenge</title>
     <script>
+        const url = "http://127.0.0.1:5000"
         let answer = "";
         let challengeNum;
 
         async function populate() {
             try {
-                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
+                const response = await fetch(`${url}/challenges`);
                 const body = await response.json();
-                console.log(response.status);
-                console.log(body);
+                //console.log(response.status);
+                //console.log(body);
                 if (response.json !== 200) {
                     const gameLetters = body.challenge.toUpperCase();
                     for (i=0;i<gameLetters.length;i++) {
@@ -74,12 +75,12 @@
                         challenge: challengeNum
                     })
                 };
-                console.log(reqOptions);
+                //console.log(reqOptions);
                 try {
-                    const response = await fetch("http://cwesticl.pythonanywhere.com/score",reqOptions);
+                    const response = await fetch(`${url}/scores`,reqOptions);
                     const body = await response.json();
-                    console.log(response.status);
-                    console.log(body);
+                    //console.log(response.status);
+                    //console.log(body);
                     if (response.status !== 200) {
                         content.innerHTML = `<h2>${body.message}</h2><h2>Try again later</h2>`;
                     }
@@ -94,13 +95,14 @@
 
                         formWord.value = body.word;
                         formScore.value = body.score;
+                        formChall.value = challengeNum;
                         boardForm.submit();
 
                     }
                 }
                 catch (err) {
-                    console.log("Error connecting to game server!");
-                    console.log(err);
+                    //console.log("Error connecting to game server!");
+                    //console.log(err);
                     alert("Error connecting to game server!");
                 }
             }
@@ -108,22 +110,23 @@
 
         async function checkData() {
             try {
-                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
+                const response = await fetch(`${url}/challenges`);
                 const body = await response.json();
-                console.log(response.status);
-                console.log(body);
+                //console.log(response.status);
+                //console.log(body);
                 if (response.json !== 200) {
                     challengeNum = body.number;
                     if (localStorage.getItem("data")) {
                         console.log("Data found");
-                        console.log(JSON.parse(localStorage.getItem("data")));
+                        //console.log(JSON.parse(localStorage.getItem("data")));
                         const data = JSON.parse(localStorage.getItem("data"));
-                        console.log(data.challenge);
-                        console.log(challengeNum);
+                        //console.log(data.challenge);
+                        //console.log(challengeNum);
                         if (data.challenge === challengeNum) {
-                            console.log("Challenge done");
+                            //console.log("Challenge done");
                             formWord.value = data.word;
                             formScore.value = data.score;
+                            formChall.value = data.challenge;
                             boardForm.submit();
                         }
                     }
@@ -146,7 +149,7 @@
         <h1>SpellingPy</h1>
         <h2>Daily Challenge</h2>
         <header>
-            <a class="board-link" href="/board">Leaderboards</a>
+            <a class="board-link" href="/boards">Leaderboards</a>
             <!--
             <br>
             <a class="board-link" href="/free">Free Play</a>
@@ -167,9 +170,10 @@
             </div>
         </div>
     </div>
-    <form action="/board" method="POST" id="board-form" class="hidden">
+    <form action="/boards" method="POST" id="board-form" class="hidden">
         <input type="text" id="form-word" name="word">
         <input type="text" id="form-score" name="score">
+        <input type="number" id="form-challenge" name="challenge">
     </form>
     <script>
         const content = document.getElementById("content");
@@ -179,6 +183,7 @@
         const boardForm = document.getElementById("board-form");
         const formWord = document.getElementById("form-word");
         const formScore = document.getElementById("form-score");
+        const formChall = document.getElementById("form-challenge");
         //console.log(JSON.parse(localStorage.getItem("data")));
         checkData();
         populate();

@@ -7,17 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>SpellingPy - Daily Leaderboard</title>
     <script>
+        const url = "http://127.0.0.1:5000"
+
         async function populate() {
             try {
-                const response = await fetch("http://cwesticl.pythonanywhere.com/score");
+                const response = await fetch(`${url}/scores/${challSpace.innerText}`);
                 const body = await response.json();
-                console.log(response.status);
-                console.log(body);
-                console.log(typeof body);
+                //console.log(response.status);
+                //console.log(body);
+                //console.log(typeof body);
                 //data = JSON.parse("body");
                 //console.log(data);
                 const leaderboard = eval("(" + body + ")").reverse();
-                console.log(leaderboard);
+                //console.log(leaderboard);
                 scoreBoard.innerHTML += `
                     <div class="score-row">
                         <div class="score-name score-column header">Name</div>
@@ -46,7 +48,7 @@
         <h1>SpellingPy</h1>
         <h2>Leaderboard</h2>
         <header>
-            <a class="board-link" href="/board">Previous Leaderboards</a>
+            <a class="board-link" href="/boards">Previous Leaderboards</a>
             <!--
             <br>
             <a class="board-link" href="/free">Free Play</a>
@@ -55,9 +57,11 @@
         <div class="word-space noselect" id="word-space">{{ message }}</div>
         <div class="score-board" id="score-board"></div>
     </div>
+    <div class="hidden" id="chall-num">{{ chall }}</div>
     <script>
         const scoreBoard = document.getElementById("score-board");
         const wordSpace = document.getElementById("word-space");
+        const challSpace = document.getElementById("chall-num");
         populate();
     </script>
 </body>

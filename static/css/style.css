@@ -4,24 +4,30 @@ body {
     margin: 0;
     color: white;
 }
+
 h1 {
     margin: 5px auto;
     font-size: 2.6em;
 }
+
 h2 {
     margin: 5px auto 10px auto;
 }
+
 header {
     display: flex;
     padding: 10px 10px;
 }
+
 .content {
     display: flex;
     flex-direction: column;
 }
+
 .grid-container {
     background-color: #547AA5;
 }
+
 .char-grid {
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -30,6 +36,7 @@ header {
     max-height: 480px;
     margin: 0 auto;
 }
+
 .char {
     aspect-ratio: 1 / 1;
     max-width: 100px;
@@ -42,6 +49,7 @@ header {
     font-size: 2em;
     border-radius: 8px;
 }
+
 .char:hover {
     background-color: #7cc0c0;
 }
@@ -140,24 +148,28 @@ header {
     background-color: #A6E9E9;
     color: black;
     text-align: center;
+    word-breaK:break-all;
+    display: grid;
+    place-items: center;
+
 }
 
 .header {
     color: white;
     background-color: #547AA5;
     font-weight: bold;
-} 
+}
 
 .score-name {
-    width: 150px;
+    width: 180px;
 }
 
 .score-score {
-    width: 50px;
+    width: 60px;
 }
 
 .score-word {
-    width: 150px;
+    width: 180px;
 }
 
 .btn-space {
@@ -219,4 +231,27 @@ header {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+@media screen and (max-width: 696px){
+    .score-name {
+    width: 120px;
+    }
+
+    .score-score {
+        width: 50px;
+    }
+
+    .score-word {
+        width: 120px;
+    }
+    .word-space {
+        min-height: 70px;
+    }
+    .reset-btn {
+        padding: 10px;
+    }
+    .submit-btn {
+        padding: 10px;
+    }
 }

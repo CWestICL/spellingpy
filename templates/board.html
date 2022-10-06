@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>SpellingPy - Leaderboards</title>
     <script>
+        const url = "http://127.0.0.1:5000"
+
         async function populate() {
             let challNum;
             try {
-                const response = await fetch("http://cwesticl.pythonanywhere.com/challenge");
+                const response = await fetch(`${url}/challenges`);
                 const body = await response.json();
-                console.log(response.status);
-                console.log(body);
+                //console.log(response.status);
+                //console.log(body);
                 challNum = body.number;
                 for (i=0;i<challNum - 1;i++) {
                     btnSpace.innerHTML += `<div id="challbtn-${i + 1}" class="board-btn noselect" onclick="getBoard(${i + 1})">${i + 1}</div>`;
@@ -32,22 +34,22 @@
             const challBtn = document.getElementById("challbtn-" + id);
             challBtn.classList.add("selected");
             try {
-                let response = await fetch(`http://cwesticl.pythonanywhere.com/challenge/${id}`);
+                let response = await fetch(`${url}/challenges/${id}`);
                 let body = await response.json();
-                console.log(response.status);
-                console.log(body);
+                //console.log(response.status);
+                //console.log(body);
 
                 wordSpace.innerText = `Challenge #${id} - ${body.date}\n${body.challenge.toUpperCase()}`;
 
-                response = await fetch(`http://cwesticl.pythonanywhere.com/score/${id}`);
+                response = await fetch(`${url}/scores/${id}`);
                 body = await response.json();
-                console.log(response.status);
-                console.log(body);
-                console.log(typeof body);
+                //console.log(response.status);
+                //console.log(body);
+                //console.log(typeof body);
                 //data = JSON.parse("body");
                 //console.log(data);
                 const leaderboard = eval("(" + body + ")").reverse();
-                console.log(leaderboard);
+                //console.log(leaderboard);
                 scoreBoard.innerHTML = `
                     <div class="score-row">
                         <div class="score-name score-column header">Name</div>
@@ -83,7 +85,7 @@
             -->
         </header>
         <div class="btn-space" id="btn-space"></div>
-        <div class="word-space" id="word-space">🢁 Select challenge 🢁</div>
+        <div class="word-space" id="word-space">⬆ Select challenge ⬆</div>
         <div class="score-board" id="score-board"></div>
     </div>
     <script>
