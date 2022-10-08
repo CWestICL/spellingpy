@@ -8,6 +8,7 @@
     <title>SpellingPy - Daily Leaderboard</title>
     <script>
         const url = "http://127.0.0.1:5000"
+        //const url = "http://cwesticl.pythonanywhere.com"
 
         async function populate() {
             try {
@@ -49,10 +50,7 @@
         <h2>Leaderboard</h2>
         <header>
             <a class="board-link" href="/boards">Previous Leaderboards</a>
-            <!--
-            <br>
             <a class="board-link" href="/free">Free Play</a>
-            -->
         </header>
         <div class="word-space noselect" id="word-space">{{ message }}</div>
         <div class="score-board" id="score-board"></div>

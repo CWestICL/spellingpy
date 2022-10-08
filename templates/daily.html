@@ -8,6 +8,7 @@
     <title>SpellingPy - Daily Challenge</title>
     <script>
         const url = "http://127.0.0.1:5000"
+        //const url = "http://cwesticl.pythonanywhere.com"
         let answer = "";
         let challengeNum;
 
@@ -20,7 +21,7 @@
                 if (response.json !== 200) {
                     const gameLetters = body.challenge.toUpperCase();
                     for (i=0;i<gameLetters.length;i++) {
-                        charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`
+                        charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`;
                     }
                     if (localStorage.getItem("data")) {
                         const data = JSON.parse(localStorage.getItem("data"));
@@ -150,10 +151,7 @@
         <h2>Daily Challenge</h2>
         <header>
             <a class="board-link" href="/boards">Leaderboards</a>
-            <!--
-            <br>
             <a class="board-link" href="/free">Free Play</a>
-            -->
         </header>
         <div class="word-space noselect" id="word-space"></div>
         <div class="grid-container">

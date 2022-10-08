@@ -7,41 +7,54 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>SpellingPy - Free Play</title>
     <script>
-        const vowels = "aaeeeiioou";
-        const consonants = "bbccddddffggghhjkllllmmnnnnnppqrrrrrrssssttttttvvwwxyyz";
-
+        const url = "http://127.0.0.1:5000"
+        //const url = "http://cwesticl.pythonanywhere.com"
+        let gameLetters;
         let answer = "";
+        const found = [];
+        const counts = {};
 
-        function getChar(category) {
-            return category[Math.floor(Math.random() * category.length)];
-        }
-
-        function getLetters() {
-            let letters = "";
-            for (i=0;i<5;i++) {
-                let char = getChar(vowels);
-                letters += char;
+        async function populate() {
+            if (localStorage.getItem("free")) {
+                const data = JSON.parse(localStorage.getItem("free"));
+                gameLetters = data.letters;
+                for (const [key, value] of Object.entries(data.counts)) {
+                    counts[key] = value;
+                }
+                for (const word of data.found) {
+                    found.push(word);
+                }
             }
-            for (i=0;i<6;i++) {
-                let char = getChar(consonants);
-                letters += char;
+            else {
+                try {
+                    const response = await fetch(`${url}/letters`);
+                    const body = await response.json();
+                    //console.log(response.status);
+                    //console.log(body);
+                    if (response.json !== 200) {
+                        gameLetters = body.letters.toUpperCase();
+                        for (const [key, value] of Object.entries(body.count)) {
+                            let count = {};
+                            count.num = value;
+                            count.found = 0;
+                            counts[key] = count;
+                        }
+                        console.log(counts);
+                    }
+                    else {
+                        alert("Couldn't connect to server. Try again later.");
+                        return;
+                    }
+                }
+                catch(err) {
+                    alert("Couldn't connect to server. Try again later.");
+                    return;
+                }
             }
-            for (i=0;i<5;i++) {
-                let category = (Math.random() > 0.5 ? vowels : consonants);
-                let char = getChar(category);
-                letters += char;
-            }
-            let shuffled = letters.split('').sort(function(){return 0.5-Math.random()}).join('');
-            console.log(shuffled,shuffled.length);
-            return shuffled.toUpperCase();
-        }
-
-        const gameLetters = getLetters();
-
-        function populate() {
             for (i=0;i<gameLetters.length;i++) {
-                charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`
+                charGrid.innerHTML += `<div id="char-${i}" class="char noselect" onclick="clickChar(${i})">${gameLetters[i]}</div>`;
             }
+            renderProgress();
         }
 
         function clickChar(id) {
@@ -66,6 +79,42 @@
             renderAnswer();
         }
 
+        function renderProgress() {
+            const countArr = [];
+            for (const [key, value] of Object.entries(counts)) {
+                let count = {};
+                count.score = key
+                count.num = value.num;
+                count.found = value.found;
+                countArr.push(count);
+            }
+            countArr.reverse();
+            countSpace.innerHTML = ``;
+            for (const count of countArr) {
+                if (count.found === count.num) {
+                    countSpace.innerHTML += `<div class="count-container done"><div>${count.score}:</div><div>${count.found}/${count.num}</div></div>`;
+                }
+                else {
+                    countSpace.innerHTML += `<div class="count-container"><div>${count.score}:</div><div>${count.found}/${count.num}</div></div>`;
+                }
+            }
+            countSpace.innerHTML += `<div class="count-container total"><div>Total:</div><div>${found.length}</div></div>`;
+
+            const wordArr = [];
+            for (let i=16;i>0;i--) {
+                for (const word of found) {
+                    if (word.length === i) {
+                        wordArr.push(word);
+                    }
+                }
+            }
+
+            foundSpace.innerHTML = ``;
+            for (const word of wordArr) {
+                foundSpace.innerHTML += `<div class="found-word">${word}</div>`;
+            }
+        }
+
         async function submit() {
             if (answer) {
                 let reqOptions = {
@@ -78,16 +127,30 @@
                     })
                 };
                 console.log(reqOptions);
+                refresh();
                 try {
-                    const response = await fetch("http://127.0.0.1:5000/score/check",reqOptions);
+                    const response = await fetch(`${url}/scores/check`,reqOptions);
                     const body = await response.json();
                     console.log(response.status);
                     console.log(body);
-                    if (body.score > 0) {
-                        alert("You score " + body.score + " for the word " + body.word);
+                    if (found.includes(body.word)) {
+                        wordSpace.innerText = ("You've already found the word the word " + body.word);
+                    }
+                    else if (body.score > 0) {
+                        wordSpace.innerText = ("You score " + body.score + " for the word " + body.word);
+                        found.push(body.word);
+                        counts[body.score].found ++;
+                        const data = {
+                            letters: gameLetters,
+                            found: found,
+                            counts: counts
+                        };
+                        localStorage.setItem("free", JSON.stringify(data));
+                        //console.log(JSON.parse(localStorage.getItem("free")));
+                        renderProgress();
                     }
                     else {
-                        alert("Sorry, but the word " + body.word + " is not in the Oxford Dictionary");
+                        wordSpace.innerText = ("Sorry, but the word " + body.word + "\nis not in the word list");
 
                     }
                 }
@@ -97,7 +160,12 @@
                     alert("Error connecting to game server!");
                 }
             }
-            refresh();
+        }
+
+        function resetLetters() {
+            localStorage.removeItem('free');
+            window.scrollTo(0, 0);
+            location.reload();
         }
     </script>
 </head>
@@ -105,6 +173,10 @@
     <div class="content" id="content">
         <h1>SpellingPy</h1>
         <h2>Free Play</h2>
+        <header>
+            <a class="board-link" href="/daily">Daily Challenge</a>
+            <a class="board-link" href="/boards">Leaderboards</a>
+        </header>
         <div class="word-space noselect" id="word-space"></div>
         <div class="grid-container">
             <div class="char-grid" id="char-grid"></div>
@@ -113,13 +185,19 @@
             <div class="reset-btn noselect free" onclick="refresh()">Reset</div>
             <div class="submit-btn noselect free" onclick="submit()">Submit</div>
         </div>
-    </div>
-    <div class="board-link-space">
-        <a class="board-link" href="/daily">Daily Challenge</a>
+        <div class="prog-container">
+            <div id="count-space"></div>
+            <div class="prog-space"><div>Found Words</div><div id="found-space"></div></div>
+        </div>
+        <footer>
+            <a class="board-link noselect" onclick="resetLetters()">Reset Letters</a>
+        </footer>
     </div>
     <script>
         const charGrid = document.getElementById("char-grid");
         const wordSpace = document.getElementById("word-space");
+        const countSpace = document.getElementById("count-space");
+        const foundSpace = document.getElementById("found-space");
         populate();
     </script>
 </body>

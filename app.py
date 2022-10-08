@@ -12,6 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.db"
 db = SQLAlchemy(app)
 
 dictionary = open('dictionary.txt', 'r')
+#dictionary = open('/home/CWestICL/spellingpy/dictionary.txt', 'r')
 word_list = dictionary.read().split("\n")
 
 
@@ -182,15 +183,13 @@ def index():
 
 @app.route("/daily")
 def daily():
-    today_date = datetime.utcnow().date()
     return render_template("daily.html")
 
 
 @app.route("/free")
 def free():
-    #today_date = datetime.utcnow().date()
-    #return render_template("free.html")
-    return redirect("/daily")
+    return render_template("free.html")
+    #return redirect("/daily")
 
 
 @app.route("/scores", methods=["POST","GET"])
@@ -434,6 +433,16 @@ def check_letters(let):
     }
     res = make_response(jsonify(response), 200)
     return res
+
+"""
+@app.route("/dictionary")
+def dict():
+    response = {
+        "words": word_list
+    }
+    res = make_response(jsonify(response), 200)
+    return res
+"""
 
 
 if __name__ == "__main__":
